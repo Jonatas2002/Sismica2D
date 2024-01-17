@@ -2,4 +2,4 @@
 
 Projeto para criação de imagens sísmicas usando o modelo convolucional em 2D
 
-![](src\SyntheticSeismicWiggle.png "Imagem")
+![](src\SyntheticSeismicWiggle.png "Imagem") # teste
