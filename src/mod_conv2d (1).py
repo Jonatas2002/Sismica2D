@@ -130,6 +130,14 @@ for i in range(nx):
             densidade[j,i] = den5
 #-------------------------------------------------------------------------------------#
 #-------------------------------------------------------------------------------------#
+
+# Simular uma falha
+# definir a posição onde irá ocorrer as falhas
+# deslocar as propriedades verticalmente na posição definida                        
+
+#-------------------------------------------------------------------------------------#
+#-------------------------------------------------------------------------------------#
+            
 z = velocidade*densidade  # Calculo da Impedância
 
 # Criando a matriz de refletividade
