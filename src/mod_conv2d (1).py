@@ -103,8 +103,10 @@ horizon1 = np.zeros(nx,dtype='int')
 horizon2 = np.zeros(nx,dtype='int')
 horizon3 = np.zeros(nx,dtype='int')
 horizon4 = np.zeros(nx,dtype='int')
+horizon5 = np.zeros(nx,dtype='int')
 
-z0, z1, z2, z3 = (n // 3), (n // 2.5), (n // 1.45), (n // 1)
+
+z0, z1, z2, z3, z4 = (n // 3), (n // 2.5), (n // 1.45), (n // 1), (n // 1.1)
 height, height1, height2, height3 = 60, 90, 70, 90
 L, L1, L2, L3 = (2 * nx), (2 * nx), (1.8 * nx), (1.9 * nx)
 
@@ -113,6 +115,8 @@ for i in range(nx):
     horizon2[i] = int(z1 + height1 * np.cos(2*np.pi*(i) / L1 + np.pi))
     horizon3[i] = int(z2 + height2 * np.sin(2*np.pi*(i) / L2 + np.pi))
     horizon4[i] = int(z3 + height3 * np.sin(2*np.pi*(i) / L3 + np.pi))
+    horizon5[i] = int(z4 + height3 * np.sin(2*np.pi*(i) / L3 + np.pi))
+
 
 for i in range(nx):
     for j in range(n):
@@ -126,8 +130,14 @@ for i in range(nx):
             velocidade[j,i] = vel4
             densidade[j,i] = den4
         if (j >= horizon4[i]):
-            velocidade[j,i] = vel5
-            densidade[j,i] = den5
+            velocidade[j,i:75] = vel5
+            densidade[j,i:75] = den5
+        if (j >= horizon5[i]):
+            velocidade[j,75:100] = vel5
+            densidade[j,75:100] = den5
+        if (j >= horizon4[i]):
+            velocidade[j,100:i] = vel5
+            densidade[j,100:i] = den5
 #-------------------------------------------------------------------------------------#
 #-------------------------------------------------------------------------------------#
 
