@@ -199,5 +199,5 @@ wiggle(TRACE, t, xx=None, color='k', sf=0.15, verbose=False)
 plt.xlabel('Traço Sismico')
 plt.ylabel('Tempo(s)')
 
-plt.savefig("SyntheticSeismicWiggle.png")
+plt.savefig("SyntheticSeismicWiggle2.png")
 plt.show()
