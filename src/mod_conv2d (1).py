@@ -105,22 +105,23 @@ horizon3 = np.zeros(nx,dtype='int')
 horizon31 = np.zeros(nx,dtype='int')  # Falha do Horizonte 3
 horizon4 = np.zeros(nx,dtype='int')
 horizon41 = np.zeros(nx,dtype='int')  # Falha no Horizonte 4
+horizon5 = np.zeros(nx,dtype='int')
 
 
-z0, z1, z2, z3, z4, z5 = (n // 3), (n // 2.5), (n // 1.45), (n // 1), (n // 1.53), (n // 1.05)
-height, height1, height2, height3 = 60, 90, 70, 90
-L, L1, L2, L3 = (2 * nx), (2 * nx), (1.8 * nx), (1.9 * nx)
+z0, z1, z2, z3, z4, z5, z6 = (n // 3), (n // 2.5), (n // 1.45), (n // 1), (n // 1.53), (n // 1.05), (n // 1)
+height, height1, height2, height3, height4 = 60, 90, 70, 90, 170
+L, L1, L2, L3, L4 = (2 * nx), (2 * nx), (1.8 * nx), (1.9 * nx), (8 * nx)
 
 for i in range(nx):
     horizon1[i] = int(z0 + height * np.cos(2*np.pi*(i) / L + np.pi))
     horizon2[i] = int(z1 + height1 * np.cos(2*np.pi*(i) / L1 + np.pi))
-    
     horizon3[i] = int(z2 + height2 * np.sin(2*np.pi*(i) / L2 + np.pi))
     horizon31[i] = int(z4 + height2 * np.sin(2*np.pi*(i) / L2 + np.pi))
 
     horizon4[i] = int(z3 + height3 * np.sin(2*np.pi*(i) / L3 + np.pi))
     horizon41[i] = int(z5 + height3 * np.sin(2*np.pi*(i) / L3 + np.pi))
 
+    horizon5[i] = int(z6 + height4 * np.sin(2*np.pi*(i) / L4 + np.pi))
 
 for i in range(nx):
     for j in range(n):
@@ -142,7 +143,9 @@ for i in range(nx):
         if (j >= horizon41[i]):
             velocidade[j,90:120] = vel5
             densidade[j,90:120] = den5
-            
+        if (j >= horizon5[i]):
+            velocidade[j,i] = 100
+            densidade[j,i] = 100            
 #-------------------------------------------------------------------------------------#
 #-------------------------------------------------------------------------------------#
 
