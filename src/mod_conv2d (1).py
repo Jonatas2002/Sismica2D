@@ -95,27 +95,31 @@ den4 = 2200
 den5 = 2500
 
 # Construção da Matriz de Velocidade e Densidade
-nx = 150
+nx = 250
 velocidade = np.zeros((n, nx)) + vel1
 densidade = np.zeros((n, nx)) + den1
 
 horizon1 = np.zeros(nx,dtype='int')
 horizon2 = np.zeros(nx,dtype='int')
 horizon3 = np.zeros(nx,dtype='int')
+horizon31 = np.zeros(nx,dtype='int')  # Falha do Horizonte 3
 horizon4 = np.zeros(nx,dtype='int')
-horizon5 = np.zeros(nx,dtype='int')
+horizon41 = np.zeros(nx,dtype='int')  # Falha no Horizonte 4
 
 
-z0, z1, z2, z3, z4 = (n // 3), (n // 2.5), (n // 1.45), (n // 1), (n // 1.1)
+z0, z1, z2, z3, z4, z5 = (n // 3), (n // 2.5), (n // 1.45), (n // 1), (n // 1.53), (n // 1.05)
 height, height1, height2, height3 = 60, 90, 70, 90
 L, L1, L2, L3 = (2 * nx), (2 * nx), (1.8 * nx), (1.9 * nx)
 
 for i in range(nx):
     horizon1[i] = int(z0 + height * np.cos(2*np.pi*(i) / L + np.pi))
     horizon2[i] = int(z1 + height1 * np.cos(2*np.pi*(i) / L1 + np.pi))
+    
     horizon3[i] = int(z2 + height2 * np.sin(2*np.pi*(i) / L2 + np.pi))
+    horizon31[i] = int(z4 + height2 * np.sin(2*np.pi*(i) / L2 + np.pi))
+
     horizon4[i] = int(z3 + height3 * np.sin(2*np.pi*(i) / L3 + np.pi))
-    horizon5[i] = int(z4 + height3 * np.sin(2*np.pi*(i) / L3 + np.pi))
+    horizon41[i] = int(z5 + height3 * np.sin(2*np.pi*(i) / L3 + np.pi))
 
 
 for i in range(nx):
@@ -129,15 +133,16 @@ for i in range(nx):
         if (j >= horizon3[i]):
             velocidade[j,i] = vel4
             densidade[j,i] = den4
+        elif (j >= horizon31[i]):
+            velocidade[j,90:120] = vel4
+            densidade[j,90:120] = den4
         if (j >= horizon4[i]):
-            velocidade[j,i:75] = vel5
-            densidade[j,i:75] = den5
-        if (j >= horizon5[i]):
-            velocidade[j,75:100] = vel5
-            densidade[j,75:100] = den5
-        if (j >= horizon4[i]):
-            velocidade[j,100:i] = vel5
-            densidade[j,100:i] = den5
+            velocidade[j,i] = vel5
+            densidade[j,i] = den5
+        if (j >= horizon41[i]):
+            velocidade[j,90:120] = vel5
+            densidade[j,90:120] = den5
+            
 #-------------------------------------------------------------------------------------#
 #-------------------------------------------------------------------------------------#
 
@@ -171,7 +176,7 @@ TRACE = np.array(traces).T
 #-------------------------------------------------------------------------------------#
 
 # Plot dos graficos
-plt.figure(figsize=(15,10))
+plt.figure(figsize=(15,15))
 plt.suptitle("visualização gráfica  da refletividade das camadas 2D", fontsize=16)
 plt.imshow(refletividade, aspect='auto',
            extent=(np.min(refletividade),np.max(refletividade),
@@ -184,7 +189,7 @@ plt.ylim(max(t), min(t))
 #plt.show()
 
 # Inserir o dado do traço sismico e a base de tempo ou profundidade
-plt.figure(figsize=(15, 10))
+plt.figure(figsize=(15, 15))
 plt.title("Plot Wiggle")
 plt.suptitle("visualização gráfica dos traços sismicos lado a lado  utilizando o wiggle", fontsize=16)
 wiggle(TRACE, t, xx=None, color='k', sf=0.15, verbose=False)
