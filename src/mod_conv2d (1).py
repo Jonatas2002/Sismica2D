@@ -179,7 +179,7 @@ TRACE = np.array(traces).T
 #-------------------------------------------------------------------------------------#
 
 # Plot dos graficos
-plt.figure(figsize=(15,15))
+plt.figure(figsize=(15,10))
 plt.suptitle("visualização gráfica  da refletividade das camadas 2D", fontsize=16)
 plt.imshow(refletividade, aspect='auto',
            extent=(np.min(refletividade),np.max(refletividade),
@@ -192,7 +192,7 @@ plt.ylim(max(t), min(t))
 #plt.show()
 
 # Inserir o dado do traço sismico e a base de tempo ou profundidade
-plt.figure(figsize=(15, 15))
+plt.figure(figsize=(15, 10))
 plt.title("Plot Wiggle")
 plt.suptitle("visualização gráfica dos traços sismicos lado a lado  utilizando o wiggle", fontsize=16)
 wiggle(TRACE, t, xx=None, color='k', sf=0.15, verbose=False)
