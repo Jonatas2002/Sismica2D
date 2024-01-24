@@ -194,7 +194,7 @@ plt.ylim(max(t), min(t))
 # Inserir o dado do traço sismico e a base de tempo ou profundidade
 plt.figure(figsize=(15, 10))
 plt.title("Plot Wiggle")
-plt.suptitle("visualização gráfica dos traços sismicos lado a lado  utilizando o wiggle", fontsize=16)
+plt.suptitle("Synthetic Seismic Wiggle", fontsize=16)
 wiggle(TRACE, t, xx=None, color='k', sf=0.15, verbose=False)
 plt.xlabel('Traço Sismico')
 plt.ylabel('Tempo(s)')
