@@ -145,3 +145,37 @@ def wiggle(data, tt=None, xx=None, color='k', sf=0.15, verbose=False):
     ax.set_xlim(xx[0] - ts, xx[-1] + ts)
     ax.set_ylim(tt[0], tt[-1])
     ax.invert_yaxis()
+    
+# -----------------------------------------------------------
+# -----------------------------------------------------------
+
+# Definindo as funções
+
+# Wavelet Ricker
+def Ricker(fs,t):
+    R = (1 - 2 * np.pi**2 * fs**2 * t**2 ) * (np.exp(-np.pi**2 * fs**2 * t**2))
+    return R
+
+# Transformada de Fourier
+def fft_wavelet(n, s, dt):
+    freq = np.fft.fftfreq(n, dt)  # Cálculo da frequência
+    mascara = freq > 0
+    fft_calculo = np.fft.fft(s)  # Cálculo da transformada do sinal final
+    fft_abs = 2.0 * np.abs(fft_calculo / n)
+
+    return mascara, freq, fft_abs
+
+# Calculo da Refletividade
+def reflectivity(velocidade, densidade):
+    z = densidade * velocidade
+    refl = np.zeros(len(z))
+
+    for i in range(len(z)-1):
+        z2 = z[i+1]
+        z1 = z[i]
+        refl[i] = (z2 - z1) / (z2 + z1)
+
+    return refl
+
+#-------------------------------------------------------------------------------------#
+#-------------------------------------------------------------------------------------#

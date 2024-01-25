@@ -2,37 +2,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from plot_wiggle import wiggle
-
-# -----------------------------------------------------------
-# -----------------------------------------------------------
-
-# Definindo as funções
-
-# Wavelet Ricker
-def Ricker(fs,t):
-    R = (1 - 2 * np.pi**2 * fs**2 * t**2 ) * (np.exp(-np.pi**2 * fs**2 * t**2))
-    return R
-
-# Transformada de Fourier
-def fft_wavelet(n, s, dt):
-    freq = np.fft.fftfreq(n, dt)  # Cálculo da frequência
-    mascara = freq > 0
-    fft_calculo = np.fft.fft(s)  # Cálculo da transformada do sinal final
-    fft_abs = 2.0 * np.abs(fft_calculo / n)
-
-    return mascara, freq, fft_abs
-
-# Calculo da Refletividade
-def reflectivity(velocidade, densidade):
-    z = densidade * velocidade
-    refl = np.zeros(len(z))
-
-    for i in range(len(z)-1):
-        z2 = z[i+1]
-        z1 = z[i]
-        refl[i] = (z2 - z1) / (z2 + z1)
-
-    return refl
+from plot_wiggle import Ricker
+from plot_wiggle import reflectivity
+from plot_wiggle import fft_wavelet
 
 #-------------------------------------------------------------------------------------#
 #-------------------------------------------------------------------------------------#
@@ -80,24 +52,14 @@ plt.tight_layout()
 
 """## Modelo Convolucional 2D """
 
-# velocidades das camadas
-vel1 = 1500 # Agua
-vel2 = 4000
-vel3 = 2000
-vel4 = 4500
-vel5 = 5000
-
-# Densidade das camadas
-den1 = 1000 # Agua
-den2 = 2600
-den3 = 1800
-den4 = 2200
-den5 = 2500
+# Velocidade e Densidade das camadas
+vel = np.array([1500, 4000, 2000, 4500, 5000])  # Velocidade
+den = np.array([1000, 2600, 1800, 2200, 2500])  # Densidade
 
 # Construção da Matriz de Velocidade e Densidade
 nx = 250
-velocidade = np.zeros((n, nx)) + vel1
-densidade = np.zeros((n, nx)) + den1
+velocidade = np.zeros((n, nx)) + vel[0]
+densidade = np.zeros((n, nx)) + den[0]
 
 horizon1 = np.zeros(nx,dtype='int')
 horizon2 = np.zeros(nx,dtype='int')
@@ -106,7 +68,6 @@ horizon31 = np.zeros(nx,dtype='int')  # Falha do Horizonte 3
 horizon4 = np.zeros(nx,dtype='int')
 horizon41 = np.zeros(nx,dtype='int')  # Falha no Horizonte 4
 horizon5 = np.zeros(nx,dtype='int')
-
 
 z0, z1, z2, z3, z4, z5, z6 = (n // 3), (n // 2.5), (n // 1.45), (n // 1), (n // 1.53), (n // 1.05), (n // 1)
 height, height1, height2, height3, height4 = 60, 90, 70, 90, 170
@@ -126,23 +87,23 @@ for i in range(nx):
 for i in range(nx):
     for j in range(n):
         if (j >= horizon1[i]):
-            velocidade[j,i] = vel2
-            densidade[j,i] = den2
+            velocidade[j,i] = vel[1]
+            densidade[j,i] = den[1]
         if (j >= horizon2[i]):
-            velocidade[j,i] = vel3
-            densidade[j,i] = den3
+            velocidade[j,i] = vel[2]
+            densidade[j,i] = den[2]
         if (j >= horizon3[i]):
-            velocidade[j,i] = vel4
-            densidade[j,i] = den4
+            velocidade[j,i] = vel[3]
+            densidade[j,i] = den[3]
         elif (j >= horizon31[i]):
-            velocidade[j,90:120] = vel4
-            densidade[j,90:120] = den4
+            velocidade[j,90:120] = vel[3]
+            densidade[j,90:120] = den[3]
         if (j >= horizon4[i]):
-            velocidade[j,i] = vel5
-            densidade[j,i] = den5
+            velocidade[j,i] = vel[4]
+            densidade[j,i] = den[4]
         if (j >= horizon41[i]):
-            velocidade[j,90:120] = vel5
-            densidade[j,90:120] = den5
+            velocidade[j,90:120] = vel[4]
+            densidade[j,90:120] = den[4]
         if (j >= horizon5[i]):
             velocidade[j,i] = 100
             densidade[j,i] = 100            
