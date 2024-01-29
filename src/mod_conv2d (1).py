@@ -271,7 +271,6 @@ plt.title('Refletividade de Camadas')
 plt.xlabel('Refletividade')
 plt.ylabel('Tempo (s)')
 plt.ylim(max(t), min(t))
-##plt.show()
 
 # Inserir o dado do traço sismico e a base de tempo ou profundidade
 plt.figure(figsize=(15, 10))
