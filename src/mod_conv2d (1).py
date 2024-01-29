@@ -162,3 +162,127 @@ plt.ylabel('Tempo(s)')
 
 plt.savefig("SyntheticSeismicWiggle.png")
 plt.show()
+
+#-------------------------------------------------------------------------------------#
+#-------------------------------------------------------------------------------------#
+
+"""## Modelo Convolucional 2D 
+    Exemplo 2"""
+    
+# Velocidade e Densidade das camadas
+vel1 = np.array([3250, 3200, 4000, 2250, 3250, 6000])  # Velocidade
+den1 = np.array([2300, 2250, 2600, 2100, 2300, 2800])  # Densidade
+
+velocidade1 = np.zeros((n, nx)) + vel1[0]
+densidade1 = np.zeros((n, nx)) + den1[0]
+
+horiz1 = np.zeros(nx,dtype='int')
+horiz2 = np.copy(horiz1)
+horiz3 = np.copy(horiz1)
+horiz4 = np.copy(horiz1)
+horiz5 = np.copy(horiz1)
+horiz6 = np.copy(horiz1)
+horiz7 = np.copy(horiz1)
+horiz8 = np.copy(horiz1)
+horiz9 = np.copy(horiz1)
+horiz10 = np.copy(horiz1)
+
+m = 0.8 # Inclinação
+
+for i in range(nx):
+    horiz1[i] = int(0 * i + 60) 
+    horiz2[i] = int(0.1 * i + 120) 
+    horiz3[i] = int(0.2 * i + 180) 
+    horiz4[i] = int(0.4 * i + 280) 
+    horiz5[i] = int(m * i + 350)  
+    horiz6[i] = int(m * i + 310)  
+    horiz7[i] = int(m * i + 280)  
+    horiz8[i] = int(m * i + 250)  
+    horiz9[i] = int(m * i + 230)  
+    horiz10[i] = int(m * i + 210)  
+    
+for i in range(nx):
+    for j in range(n):
+        if (j >= horiz1[i]):
+            velocidade1[j,i] = vel1[1]
+            densidade1[j,i] = den1[1]
+        if (j >= horiz2[i]):
+            velocidade1[j,i] = vel1[2]
+            densidade1[j,i] = den1[2]
+        if (j >= horiz3[i]):
+            velocidade1[j,i] = vel1[3]
+            densidade1[j,i] = den1[3]
+        if (j >= horiz4[i]):
+            velocidade1[j,i] = vel1[4]
+            densidade1[j,i] = den1[4]
+
+        if (j >= horiz5[i]):
+            velocidade1[j,i] = vel1[5]
+            densidade1[j,i] = den1[5]
+        if (j >= horiz6[i]):
+            velocidade1[j,40:i] = vel1[5]
+            densidade1[j,40:i] = den1[5]
+        if (j >= horiz7[i]):
+            velocidade1[j,80:i] = vel1[5]
+            densidade1[j,80:i] = den1[5]
+        if (j >= horiz8[i]):
+            velocidade1[j,120:i] = vel1[5]
+            densidade1[j,120:i] = den1[5]
+        if (j >= horiz9[i]):
+            velocidade1[j,160:i] = vel1[5]
+            densidade1[j,160:i] = den1[5]
+        if (j >= horiz10[i]):
+            velocidade1[j,200:i] = vel1[5]
+            densidade1[j,200:i] = den1[5]
+            
+#-------------------------------------------------------------------------------------#
+#-------------------------------------------------------------------------------------#
+            
+z2 = velocidade*densidade  # Calculo da Impedância
+
+# Criando a matriz de refletividade
+refletividades1 = []
+for i in range(nx):
+    refletividade1 = reflectivity(velocidade1[:, i], densidade1[:, i])
+    refletividades1.append(refletividade1)
+
+refletividade1 = np.array(refletividades1).T
+
+# Traço Sismico
+traces1 = []
+
+for i in range(nx):
+    trace1 = np.convolve(R, refletividade1[:, i], 'same')
+    traces1.append(trace1)
+
+TRACE1 = np.array(traces1).T
+
+#-------------------------------------------------------------------------------------#
+#-------------------------------------------------------------------------------------#
+
+# Plot dos graficos
+plt.figure(figsize=(15,10))
+plt.suptitle("visualização gráfica  da refletividade das camadas 2D", fontsize=16)
+plt.imshow(refletividade1, aspect='auto',
+           extent=(np.min(refletividade1),np.max(refletividade1),
+           np.max(t), np.min(t)), cmap='Greys')
+plt.title('Refletividade de Camadas')
+#plt.yticks([])  # Remova as marcações do eixo y
+plt.xlabel('Refletividade')
+plt.ylabel('Tempo (s)')
+plt.ylim(max(t), min(t))
+##plt.show()
+
+# Inserir o dado do traço sismico e a base de tempo ou profundidade
+plt.figure(figsize=(15, 10))
+plt.title("Plot Wiggle")
+plt.suptitle("Synthetic Seismic Wiggle Mod2", fontsize=16)
+wiggle(TRACE1, t, xx=None, color='k', sf=0.15, verbose=False)
+plt.xlabel('Traço Sismico')
+plt.ylabel('Tempo(s)')
+
+plt.savefig("SyntheticSeismicWiggle_mod2.png")
+plt.show()
+
+#-------------------------------------------------------------------------------------#
+#-------------------------------------------------------------------------------------#
