@@ -285,3 +285,107 @@ plt.show()
 
 #-------------------------------------------------------------------------------------#
 #-------------------------------------------------------------------------------------#
+
+# Velocidade e Densidade das camadas
+vel2 = np.array([1500, 2000, 5000, 2250, 3250, 6000])  # Velocidade
+den2 = np.array([1000, 2300, 2500, 2100, 2300, 2800])  # Densidade
+
+velocidade2 = np.zeros((n, nx)) + vel2[0]
+densidade2 = np.zeros((n, nx)) + den2[0]
+
+h1 = np.zeros(nx,dtype='int')
+h2 = np.zeros(nx,dtype='int')
+h3 = np.zeros(nx,dtype='int')
+h4 = np.zeros(nx,dtype='int')
+h5 = np.zeros(nx,dtype='int')
+
+
+z0, z1, z2, z3, z4, z5 = (n // 4.5), (n // 3.8), (n // 3.1), (n // 2.8), (n // 2.2), (n // 2)
+height, height2 = 45, 180
+L = (0.5 * nx)
+
+for i in range(nx):
+    h1[i] = int(z0 + height2 * np.sinc(2*np.pi*(i) / L + np.pi))
+    h2[i] = int(z2 + height * np.cos(2*np.pi*(i) / L + np.pi))
+    h3[i] = int(z3 + height * np.cos(2*np.pi*(i) / L + np.pi))
+    h4[i] = int(z4 + height * np.cos(2*np.pi*(i) / L + np.pi))
+    h5[i] = int(z5 + height * np.cos(2*np.pi*(i) / L + np.pi))
+
+
+for i in range(nx):
+    for j in range(n):
+        if (j >= h1[i]):
+            velocidade2[j,i] = vel2[1]
+            densidade2[j,i] = den2[1]
+
+        if (j >= h2[i]):
+            velocidade2[j,i] = vel2[2]
+            densidade2[j,i] = den2[2]
+        if (j >= h2[i]):
+            velocidade2[j,125:144] = vel2[2]
+            densidade2[j,125:144] = den2[2]
+
+        if (j >= h3[i]):
+            velocidade2[j,i] = vel2[3]
+            densidade2[j,i] = den2[3]
+        if (j >= h3[i]):
+            velocidade2[j,125:146] = vel2[3]
+            densidade2[j,125:146] = den2[3]
+
+        if (j >= h4[i]):
+            velocidade2[j,i] = vel2[4]
+            densidade2[j,i] = den2[4]
+        if (j >= h4[i]):
+            velocidade2[j,125:148] = vel2[4]
+            densidade2[j,125:148] = den2[4]
+
+        if (j >= h5[i]):
+            velocidade2[j,i] = vel2[5]
+            densidade2[j,i] = den2[5]
+        if (j >= h5[i]):
+            velocidade2[j,125:150] = vel2[5]
+            densidade2[j,125:150] = den2[5]
+
+
+
+
+# Criando a matriz de refletividade
+refletividades2 = []
+for i in range(nx):
+    refletividade2 = reflectivity(velocidade2[:, i], densidade2[:, i])
+    refletividades2.append(refletividade2)
+
+refletividade2 = np.array(refletividades2).T
+
+# Traço Sismico
+traces2 = []
+
+for i in range(nx):
+    trace2 = np.convolve(R, refletividade2[:, i], 'same')
+    traces2.append(trace2)
+
+TRACE2 = np.array(traces2).T
+
+# Plot dos graficos
+plt.figure(figsize=(15,10))
+plt.suptitle("visualização gráfica  da refletividade das camadas 2D", fontsize=16)
+plt.imshow(refletividade2, aspect='auto',
+           extent=(np.min(refletividade2),np.max(refletividade2),
+           np.max(t), np.min(t)), cmap='Greys')
+plt.title('Refletividade de Camadas')
+#plt.yticks([])  # Remova as marcações do eixo y
+plt.xlabel('Refletividade')
+plt.ylabel('Tempo (s)')
+plt.ylim(max(t), min(t))
+
+# Inserir o dado do traço sismico e a base de tempo ou profundidade
+plt.figure(figsize=(15, 10))
+plt.title("Plot Wiggle")
+plt.suptitle("Synthetic Seismic Wiggle Mod2", fontsize=16)
+wiggle(TRACE2, t, xx=None, color='k', sf=0.15, verbose=False)
+plt.xlabel('Traço Sismico')
+plt.ylabel('Tempo(s)')
+
+plt.savefig("SyntheticSeismicWiggle_mod3.png")
+plt.show()
+
