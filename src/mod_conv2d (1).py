@@ -1,10 +1,10 @@
 # Importar as bibliotecas
 import numpy as np
 import matplotlib.pyplot as plt
-from plot_wiggle import wiggle
-from plot_wiggle import Ricker
-from plot_wiggle import reflectivity
-from plot_wiggle import fft_wavelet
+from seismic import wiggle
+from seismic import Ricker
+from seismic import reflectivity
+from seismic import fft_wavelet
 
 #-------------------------------------------------------------------------------------#
 #-------------------------------------------------------------------------------------#
