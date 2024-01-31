@@ -68,8 +68,10 @@ horizon31 = np.zeros(nx,dtype='int')  # Falha do Horizonte 3
 horizon4 = np.zeros(nx,dtype='int')
 horizon41 = np.zeros(nx,dtype='int')  # Falha no Horizonte 4
 horizon5 = np.zeros(nx,dtype='int')
+horizon51 = np.zeros(nx,dtype='int')
 
-z0, z1, z2, z3, z4, z5, z6 = (n // 3), (n // 2.5), (n // 1.45), (n // 1), (n // 1.53), (n // 1.05), (n // 1)
+
+z0, z1, z2, z3, z4, z5, z6, z7 = (n // 3), (n // 2.5), (n // 1.45), (n // 1), (n // 1.53), (n // 1.05), (n // 1), (n // 0.92)
 height, height1, height2, height3, height4 = 60, 90, 70, 90, 170
 L, L1, L2, L3, L4 = (2 * nx), (2 * nx), (1.8 * nx), (1.9 * nx), (8 * nx)
 
@@ -83,6 +85,7 @@ for i in range(nx):
     horizon41[i] = int(z5 + height3 * np.sin(2*np.pi*(i) / L3 + np.pi))
 
     horizon5[i] = int(z6 + height4 * np.sin(2*np.pi*(i) / L4 + np.pi))
+    horizon51[i] = int(z7 + height4 * np.sin(2*np.pi*(i) / L4 + np.pi))
 
 for i in range(nx):
     for j in range(n):
@@ -105,8 +108,11 @@ for i in range(nx):
             velocidade[j,90:120] = vel[4]
             densidade[j,90:120] = den[4]
         if (j >= horizon5[i]):
-            velocidade[j,i] = 100
-            densidade[j,i] = 100            
+            velocidade[j,i] = 1600
+            densidade[j,i] = 1100
+        if (j >= horizon51[i]):
+            velocidade[j,90:120] = 1600
+            densidade[j,90:120] = 1100         
 #-------------------------------------------------------------------------------------#
 #-------------------------------------------------------------------------------------#
 
