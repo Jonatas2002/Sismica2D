@@ -151,13 +151,36 @@ def wiggle(data, tt=None, xx=None, color='k', sf=0.15, verbose=False):
 
 # Definindo as funções
 
+#-------------------------------------------------------------------------------------#
+#-------------------------------------------------------------------------------------#
+
+
 # Wavelet Ricker
 def Ricker(fs,t):
     R = (1 - 2 * np.pi**2 * fs**2 * t**2 ) * (np.exp(-np.pi**2 * fs**2 * t**2))
     return R
+# wavelet ormsby
+def  Ormsby(f1, f2, f3, f4, t):
+    w1 = (((np.pi * f4)**2)/(np.pi*f4 - np.pi*f3)) * np.sinc(f4 * t)**2
+    w2 = (((np.pi * f3)**2)/(np.pi*f4 - np.pi*f3)) * np.sinc(f3 * t)**2
+    w3 = (((np.pi * f2)**2)/(np.pi*f2 - np.pi*f1)) * np.sinc(f2 * t)**2
+    w4 = (((np.pi * f1)**2)/(np.pi*f2 - np.pi*f1)) * np.sinc(f1 * t)**2
+
+    O = ((w1 - w2) - (w3 - w4))
+    return O
+
+# wavelet klauder
+def Klauder(TT, t, f1, f2):
+    k = (f2-f1)/TT  # Taxa de variação da frequência com o tempo
+    f0 = (f2 + f1)/2
+    kl = np.real(np.sin(np.pi * k * t *(TT - t))/(np.pi * k* t))* np.exp(2 * np.pi * 1j * f0 * t)
+    return kl
+
+#-------------------------------------------------------------------------------------#
+#-------------------------------------------------------------------------------------#
 
 # Transformada de Fourier
-def fft_wavelet(n, s, dt):
+def FFT(n, s, dt):
     freq = np.fft.fftfreq(n, dt)  # Cálculo da frequência
     mascara = freq > 0
     fft_calculo = np.fft.fft(s)  # Cálculo da transformada do sinal final

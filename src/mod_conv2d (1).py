@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from seismic import wiggle
 from seismic import Ricker
 from seismic import reflectivity
-from seismic import fft_wavelet
+from seismic import FFT
 
 #-------------------------------------------------------------------------------------#
 #-------------------------------------------------------------------------------------#
@@ -20,7 +20,7 @@ fs = 30  #frequencia do sinal ricker
 
 # Função Wavelet Ricker
 R = Ricker(fs, t-tlag)
-mascara, freqR, fft_absR = fft_wavelet(n, R, dt)
+mascara, freqR, fft_absR = FFT(n, R, dt)
 
 # PLOT DOS GRAFICOS
 plt.figure(figsize=(12, 3))
