@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from seismic import wiggle
 from seismic import Ricker
 from seismic import reflectivity
-from seismic import fft_wavelet
+from seismic import FFT
 from seismic import time_for_depth
 from seismic import depth_for_time
 
@@ -24,7 +24,7 @@ fs = 30  #frequencia do sinal ricker
 
 # Função Wavelet Ricker
 R = Ricker(fs, t-tlag)
-mascara, freqR, fft_absR = fft_wavelet(nt, R, dt)
+mascara, freqR, fft_absR = FFT(nt, R, dt)
 
 # PLOT DOS GRAFICOS
 plt.figure()
@@ -69,8 +69,8 @@ refletividade =  reflectivity(velocidade,densidade)
 # Convolvendo a refletividade com cada uma das wavelets e gerendo traços sismicos sinteticos
 trace1D = np.convolve(R, refletividade, mode='same')   # Convolução da Refletividade com a wavelet ricker
 
-plt.figure(figsize=(18, 10))
-plt.suptitle("visualização gráfica de diversos perfis: o perfil 1 ilustra um perfil de velocidades das camadas, o perfil 2 representa a densidade das camadas, \no perfil 3 destaca os sedimentos presentes, a quarta imagem exibe a refletividade das camadas, e, por fim, representação dos traços sísmicos correspondentes. \n \n", fontsize=16)
+plt.figure(figsize=(18, 7))
+plt.suptitle("Visualização de modelos de velocidade, densidade, impedância, refletividade das camadas, e traços sísmicos na base temporal", fontsize=12)
 
 # Plot Perfil de Velocidade
 plt.subplot(1,5,1)
@@ -121,63 +121,124 @@ plt.ylim(max(t), min(t))
 #           np.max(t), np.min(t)), cmap='Greys')
 
 plt.tight_layout()
-plt.show()
+#plt.show()
 
 #####################################################
 #####################################################
 
 # Convertendo tempo para profundidade
-prof = time_for_depth(nt, t, velocidade)
+depth = time_for_depth(nt, t, velocidade)
 
-plt.figure(figsize=(18, 10))
+plt.figure(figsize=(18, 7))
+plt.suptitle("Visualização de modelos de velocidade, densidade, impedância, refletividade das camadas, e traços sísmicos na base da profundidade", fontsize=12)
 
 # Plot Perfil de Velocidade
 plt.subplot(1,5,1)
-plt.plot(velocidade,prof)
+plt.plot(velocidade,depth)
 plt.title('Perfil Velocidade de Camadas')
 plt.xlabel('Velocidade (m/s)')
 plt.ylabel('Tempo (s)')
-plt.ylim(max(prof), min(prof))
+plt.ylim(max(depth), min(depth))
 
 # Plot Perfil de Densidade
 plt.subplot(1,5,2)
-plt.plot(densidade,prof)
+plt.plot(densidade,depth)
 plt.title('Perfil Densidade de Camadas')
 plt.xlabel('Densidade (kg/m³)')
 plt.ylabel('Tempo (s)')
 #plt.yticks([])  # Remova as marcações do eixo y
-plt.ylim(max(prof), min(prof))
+plt.ylim(max(depth), min(depth))
 
 
 plt.subplot(1,5,3)
-plt.plot(z,prof)
+plt.plot(z,depth)
 plt.title('Impedância Acustica')
 #plt.yticks([])  # Remova as marcações do eixo y
 plt.xlabel('Impedância Acustica')
 #plt.ylabel('Tempo (s)')
-plt.ylim(max(prof), min(prof))
+plt.ylim(max(depth), min(depth))
 
 # Plot Refletividade de Camadas
 plt.subplot(1,5,4)
-plt.plot(refletividade,prof)
+plt.plot(refletividade,depth)
 plt.title('Refletividade de Camadas')
 #plt.yticks([])  # Remova as marcações do eixo y
 plt.xlabel('Refletividade (kg/m³)')
 #plt.ylabel('Tempo (s)')
-plt.ylim(max(prof), min(prof))
+plt.ylim(max(depth), min(depth))
 
 plt.subplot(1,5,5)
-plt.plot(trace1D, prof,'b', label='Ricker {} Hz'.format(fs))
+plt.plot(trace1D, depth,'b', label='Ricker {} Hz'.format(fs))
 plt.title('Traço Sismico 1 (Ricker)')
 #plt.yticks([])  # Remova as marcações do eixo y
 plt.xlabel('Traço Sismico')
 #plt.ylabel('Tempo (s)')
 plt.legend(loc='upper right', fontsize=11)
-plt.ylim(max(prof), min(prof))
+plt.ylim(max(depth), min(depth))
 
 #plt.imshow(np.array([trace1D]*nt).T, aspect='auto',
 #           extent=(np.min(trace1D),np.max(trace1D),
-#           np.max(prof), np.min(prof)), cmap='Greys')
+#           np.max(depth), np.min(depth)), cmap='Greys')
+
+plt.tight_layout()
+#plt.show()
+
+####################################################
+#####################################################
+
+# Convertendo profundidade para tempo
+time = depth_for_time(nt, depth, velocidade)
+
+plt.figure(figsize=(18, 7))
+plt.suptitle("Visualização de modelos convertidos de volta para a base do tempo", fontsize=12)
+
+# Plot Perfil de Velocidade
+plt.subplot(1,5,1)
+plt.plot(velocidade,time)
+plt.title('Perfil Velocidade de Camadas')
+plt.xlabel('Velocidade (m/s)')
+plt.ylabel('Tempo (s)')
+plt.ylim(max(time), min(time))
+
+# Plot Perfil de Densidade
+plt.subplot(1,5,2)
+plt.plot(densidade,time)
+plt.title('Perfil Densidade de Camadas')
+plt.xlabel('Densidade (kg/m³)')
+plt.ylabel('Tempo (s)')
+#plt.yticks([])  # Remova as marcações do eixo y
+plt.ylim(max(time), min(time))
+
+
+plt.subplot(1,5,3)
+plt.plot(z,time)
+plt.title('Impedância Acustica')
+#plt.yticks([])  # Remova as marcações do eixo y
+plt.xlabel('Impedância Acustica')
+#plt.ylabel('Tempo (s)')
+plt.ylim(max(time), min(time))
+
+# Plot Refletividade de Camadas
+plt.subplot(1,5,4)
+plt.plot(refletividade,time)
+plt.title('Refletividade de Camadas')
+#plt.yticks([])  # Remova as marcações do eixo y
+plt.xlabel('Refletividade (kg/m³)')
+#plt.ylabel('Tempo (s)')
+plt.ylim(max(time), min(time))
+
+plt.subplot(1,5,5)
+plt.plot(trace1D, time,'b', label='Ricker {} Hz'.format(fs))
+plt.title('Traço Sismico 1 (Ricker)')
+#plt.yticks([])  # Remova as marcações do eixo y
+plt.xlabel('Traço Sismico')
+#plt.ylabel('Tempo (s)')
+plt.legend(loc='upper right', fontsize=11)
+plt.ylim(max(time), min(time))
+
+#plt.imshow(np.array([trace1D]*nt).T, aspect='auto',
+#           extent=(np.min(trace1D),np.max(trace1D),
+#           np.max(time), np.min(time)), cmap='Greys')
 
 plt.tight_layout()
 plt.show()

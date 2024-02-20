@@ -1,6 +1,7 @@
 # Importar as bibliotecas
 import numpy as np
 import matplotlib.pyplot as plt
+
 from seismic import wiggle
 from seismic import Ricker
 from seismic import reflectivity
