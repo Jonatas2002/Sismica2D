@@ -339,51 +339,81 @@ for i in range(nx):
 
 prof = np.array(profundidades).T
 
-# Plot dos graficos
-plt.figure(figsize=(15,14))
-plt.suptitle("visualização gráfica  da refletividade das camadas 2D", fontsize=16)
+# Voltando para a base do tempo
+tempos = []
+for i in range(nx):
+    tempo = depth_for_time(nt, prof[:, i], velocidade[:, i])
+    tempos.append(tempo)
 
-plt.subplot(211)
+TEMPO = np.array(tempos).T
+
+# Plot dos graficos
+plt.figure(figsize=(15,9))
+plt.suptitle("Comparação da refletividade das camadas 2D no tempo e profundidade", fontsize=12)
+
+plt.subplot(311)
 plt.imshow(refletividade, aspect='auto',
            extent=(np.min(refletividade),np.max(refletividade),
            np.max(t), np.min(t)), cmap='gray')
-plt.title('Refletividade de Camadas')
-#plt.yticks([])  # Remova as marcações do eixo y
-plt.xlabel('Refletividade')
+plt.title('Refletividade de Camadas no tempo- Perfil Base')
+plt.xticks([])  # Remova as marcações do eixo x
+#plt.xlabel('Refletividade')
 plt.ylabel('Tempo (s)')
 plt.ylim(max(t), min(t))
 
 
-plt.subplot(212)
+plt.subplot(312)
 plt.imshow(refletividade, aspect='auto',
            extent=(np.min(refletividade),np.max(refletividade),
            np.max(prof[:, 100]), np.min(prof[:, 100])), cmap='gray')
 plt.title('Refletividade de Camadas')
+plt.xticks([])  # Remova as marcações do eixo x
+#plt.xlabel('Refletividade')
+plt.ylabel('Profundidade (m)')
+plt.ylim(np.max(prof[:, 0]), np.min(prof[:, 0]))
+
+plt.subplot(313)
+plt.imshow(refletividade, aspect='auto',
+           extent=(np.min(refletividade),np.max(refletividade),
+           np.max(TEMPO), np.min(TEMPO)), cmap='gray')
+plt.title('Refletividade de Camadas no tempo - Perfil teste')
 #plt.yticks([])  # Remova as marcações do eixo y
 plt.xlabel('Refletividade')
 plt.ylabel('Profundidade (m)')
-plt.ylim(np.max(prof[:, 100]), np.min(prof[:, 100]))
+plt.ylim(np.max(TEMPO), np.min(TEMPO))
+
 plt.tight_layout()
 plt.show()
 
 
 # Plot wiggle na base do tempo 
-plt.figure(figsize=(15, 7))
-plt.subplot(211)
-plt.title("Plot Wiggle")
-plt.suptitle("Synthetic Seismic Wiggle", fontsize=16)
+plt.figure(figsize=(15, 9))
+plt.suptitle("Synthetic Seismic Wiggle", fontsize=12)
+
+plt.subplot(311)
+plt.title("Sismograma na base do tempo - Modelo Base")
+#plt.suptitle("Synthetic Seismic Wiggle", fontsize=12)
 wiggle(TRACE, t, xx=None, color='k', sf=0.15, verbose=False)
-plt.xlabel('Traço Sismico')
+#plt.xlabel('Traço Sismico')
 plt.ylabel('Tempo(s)')
+plt.xticks([])  # Remova as marcações do eixo x
 
 # Plot wiggle na base da Profundidade
-plt.subplot(212)
-plt.title("Plot Wiggle")
+plt.subplot(312)
+plt.title("Sismograma na base da Profundidade")
 wiggle(TRACE, prof[:, 0], xx=None, color='k', sf=0.15, verbose=False)
-plt.xlabel('Traço Sismico')
+#plt.xlabel('Traço Sismico')
 plt.ylabel('Profundidade(m)')
+plt.xticks([])  # Remova as marcações do eixo x
+
+# Plot wiggle de volta na base da tempo
+plt.subplot(313)
+plt.title("Sismograma na base do tempo - Modelo Teste")
+wiggle(TRACE, TEMPO[:, 0], xx=None, color='k', sf=0.15, verbose=False)
+plt.xlabel('Traço Sismico')
+plt.ylabel('tempo(s)')
 
 plt.tight_layout()
+
 plt.savefig("SyntheticSeismicWiggle.png")
 plt.show()
-
