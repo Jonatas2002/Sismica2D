@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-
 def read_binary_matrix(nz, nx, filename):
     data = np.fromfile(filename, dtype = np.float32, count = nz*nx)
     return np.reshape(data, [nz, nx], order = 'F')
@@ -70,7 +69,7 @@ class Model2section():
         self.amp_time = np.zeros((self.nt, self.nx))
     
         for i in range(self.nz):
-            t += np.array(2 * (self.dh/ self.model[i]) / self.dt, dtype = int)
+            t += np.array(2 * (self.dh / self.model[i]) / self.dt, dtype = int)
             for j in range(self.nx):
                 if t[j] < self.nt:
                     self.amp_time[t[j],j] = self.amp_depth[i,j]

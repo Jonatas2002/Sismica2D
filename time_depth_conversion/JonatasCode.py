@@ -14,6 +14,7 @@ dt = 1e-3    # Espaçamento temporal [s]
 time = 4.0   # Tempo total [s]
 fmax = 45    # Frequência máxima [Hz] 
 
+
 xloc = np.linspace(0, nx - 1, 9, dtype=int)
 xlab = np.array(xloc * dh, dtype=int)
 
@@ -33,8 +34,10 @@ Seismic_time = np.array(tempos).T
 plt.figure(figsize=(15, 6))
 plt.subplot(211)
 plt.imshow(seismic1.T, aspect='auto', cmap='jet', extent=[0, nx * dh, nz * dh, 0])
-plt.xticks(xloc * dh, xlab)
-plt.yticks(zloc * dh, zlab)
+#plt.imshow(seismic1.T, aspect='auto', cmap='jet')
+
+#plt.xticks(xloc * dh, xlab)
+#plt.yticks(zloc * dh, zlab)
 plt.colorbar(label='Velocity [m/s]')
 plt.xlabel('Distance [m]')
 plt.ylabel('Depth [m]')
@@ -42,6 +45,7 @@ plt.title('Velocity Model')
 
 plt.subplot(212)
 plt.imshow(Seismic_time, aspect='auto', cmap='jet', extent=[0, nx * dh, np.max(Seismic_time), 0])
+#plt.imshow(Seismic_time, aspect='auto', cmap='jet')
 
 plt.colorbar(label='Velocity [m/s]')
 plt.xlabel('Distance [m]')
@@ -49,5 +53,4 @@ plt.ylabel('time [s]')
 plt.title('Velocity Model')
 
 plt.show()
-
 
