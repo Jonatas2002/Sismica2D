@@ -53,4 +53,3 @@ plt.ylabel('time [s]')
 plt.title('Velocity Model')
 
 plt.show()
-
