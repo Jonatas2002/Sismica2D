@@ -24,11 +24,11 @@ perc = np.percentile(cmp_gather, 90)
 fig, ax = plt.subplots(figsize = (5,7))
 ax.set_title('CMP Gather',  fontsize = 15)
 ax.imshow(cmp_gather.T, aspect='auto', cmap='Grays', extent=[-(nx * dx)/2, (nx * dx)/2, nz * dt, 0], vmin=-perc, vmax=perc)
-# ax.plot(trace100 - 1025, t, 'red', '---')
+ax.plot(trace100 - 1025, t, 'red', '---')
 
 ax.set_xlabel('x = offset[m]',  fontsize = 15)
 ax.set_ylabel('t = TWT [s]',  fontsize = 15)
-ax.set_xticks(np.arange(-3525,3526,1175))
+#ax.set_xticks(np.arange(-3525,3526,1175))
 
 fig.tight_layout()
 plt.show()
@@ -64,7 +64,7 @@ plt.show()
 plt.figure(figsize=(15, 10))
 plt.title("Plot Wiggle")
 plt.suptitle("Synthetic Seismic Wiggle", fontsize=16)
-tw = wiggle(cmp_gather.T, t, xx=None, color='k', sf=3.5, verbose=False)
+tw = wiggle(cmp_gather.T, t, xx=None, color='k', sf=1.5, verbose=False)
 
 plt.xlabel('Traço Sismico')
 plt.ylabel('Tempo(s)')
@@ -81,4 +81,5 @@ plt.xlabel('Traço Sismico')
 plt.ylabel('Tempo(s)')
 plt.savefig("SyntheticSeismicWiggle.png")
 plt.show()
+
 
